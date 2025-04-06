@@ -1,0 +1,29 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "module-alias": "^2.2.3",
+    "pg": "^8.14.1"
+  },
+  "_moduleAliases": {
+    "@": "./src",
+    "@config": "./src/config",
+    "@models": "./src/models",
+    "@routes": "./src/routes",
+    "@services": "./src/services",
+    "@database": "./src/database",
+    "@controllers": "./src/controllers"
+  }
+}
