@@ -1,7 +1,8 @@
 class Message {
-  constructor(id, content, senderId, senderUsername) {
+  constructor(id, content, groupId, senderId, senderUsername) {
     this._id = id;
     this._content = content;
+    this._groupId = groupId;
     this._senderId = senderId;
     this._senderUsername = senderUsername;
   }
@@ -20,6 +21,14 @@ class Message {
 
   set content(value) {
     this._content = value;
+  }
+
+  get groupId() {
+    return this._groupId;
+  }
+
+  set groupId(value) {
+    this._groupId = value;
   }
 
   get senderId() {
@@ -42,6 +51,7 @@ class Message {
     return {
       id: this._id,
       content: this._content,
+      groupId: this._groupId,
       senderId: this._senderId,
       senderUsername: this._senderUsername
     };

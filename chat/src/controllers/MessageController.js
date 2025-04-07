@@ -4,9 +4,15 @@ const CreateMessageService = require('@services/CreateMessageService');
 const MessageController = {
   async createMessage(req, res) {
     try {
-      const { content, senderId, senderUsername } = req.body;
+      const { content, groupId, senderId, senderUsername } = req.body;
 
-      const message = new Message(0, content, senderId, senderUsername);
+      const message = new Message(
+        0,
+        content,
+        groupId,
+        senderId,
+        senderUsername
+      );
 
       const result = await CreateMessageService(message);
 

@@ -4,6 +4,12 @@ exports.up = function (knex) {
     table.string('senderId').notNullable();
     table.string('senderUsername').notNullable();
     table.text('content').notNullable();
+    table
+      .integer('groupId')
+      .unsigned()
+      .references('id')
+      .inTable('groups')
+      .onDelete('CASCADE');
     table.timestamp('createdAt').defaultTo(knex.fn.now());
   });
 };
