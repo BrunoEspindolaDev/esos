@@ -1,20 +1,37 @@
+const WebSocket = require('ws');
 const Message = require('@models/Message');
 const CreateMessageService = require('@services/CreateMessageService');
+const { getSocketIoInstance } = require('@config/websocket');
 
 const MessageController = {
   async createMessage(req, res) {
     try {
-      const { content, groupId, senderId, senderUsername } = req.body;
+      const {
+        content,
+        groupId,
+        senderId,
+        senderUsername,
+        senderBgColor,
+        socketId
+      } = req.body;
 
       const message = new Message(
         0,
         content,
         groupId,
         senderId,
-        senderUsername
+        senderUsername,
+        senderBgColor
       );
 
       const result = await CreateMessageService(message);
+
+      const io = getSocketIoInstance();
+      const socket = io.sockets.sockets.get(req.body.socketId);
+
+      if (socket) {
+        socket.broadcast.emit('message', message);
+      }
 
       return res.status(201).json({
         message: 'Mensagem criada com sucesso',

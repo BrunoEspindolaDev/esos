@@ -3,6 +3,7 @@ exports.up = function (knex) {
     table.increments('id').primary();
     table.string('senderId').notNullable();
     table.string('senderUsername').notNullable();
+    table.string('senderBgColor').notNullable();
     table.text('content').notNullable();
     table
       .integer('groupId')

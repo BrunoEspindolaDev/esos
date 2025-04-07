@@ -1,10 +1,11 @@
 class Message {
-  constructor(id, content, groupId, senderId, senderUsername) {
+  constructor(id, content, groupId, senderId, senderUsername, senderBgColor) {
     this._id = id;
     this._content = content;
     this._groupId = groupId;
     this._senderId = senderId;
     this._senderUsername = senderUsername;
+    this._senderBgColor = senderBgColor;
   }
 
   get id() {
@@ -47,13 +48,22 @@ class Message {
     this._senderUsername = value;
   }
 
+  get senderBgColor() {
+    return this._senderBgColor;
+  }
+
+  set senderBgColor(value) {
+    this._senderBgColor = value;
+  }
+
   toJSON() {
     return {
       id: this._id,
       content: this._content,
       groupId: this._groupId,
       senderId: this._senderId,
-      senderUsername: this._senderUsername
+      senderUsername: this._senderUsername,
+      senderBgColor: this._senderBgColor
     };
   }
 }
