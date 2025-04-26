@@ -2,19 +2,34 @@ const db = require('@database/knex');
 
 const createMessageService = async ({
   content,
+  messageId,
+  groupId,
   senderId,
   senderUsername,
-  senderBgColor
+  senderBgColor,
+  invalidTerms
 }) => {
   const [message] = await db('messages')
-    .insert({ content, senderId, senderUsername, senderBgColor })
+    .insert({
+      content,
+      messageId,
+      groupId,
+      senderId,
+      senderUsername,
+      senderBgColor,
+      invalidTerms
+    })
     .returning([
       'id',
+      'content',
+      'messageId',
+      'groupId',
       'senderId',
       'senderUsername',
       'senderBgColor',
-      'content',
-      'createdAt'
+      'invalidTerms',
+      'createdAt',
+      'updatedAt'
     ]);
 
   return message;

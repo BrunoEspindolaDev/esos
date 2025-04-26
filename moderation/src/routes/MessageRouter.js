@@ -5,9 +5,9 @@ const MessageController = require('@controllers/MessageController');
 const router = express.Router();
 
 router.post(
-  '/messages',
+  '/messages/analyze',
   getKeycloak().protect(),
-  MessageController.createMessage
+  MessageController.analyzeMessage
 );
 
 module.exports = router;
