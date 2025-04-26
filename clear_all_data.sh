@@ -5,8 +5,10 @@ set -e  # Encerra o script se qualquer comando falhar
 echo "🛑 Parando e removendo containers..."
 docker-compose down -v
 
-echo "🧹 Removendo volume do PostgreSQL (pgdata)..."
-docker volume rm my_postgres_pgdata || echo "Volume já removido ou não encontrado."
+echo "🧹 Removendo dados persistentes dos bancos..."
+rm -rf ./data/chat/*
+rm -rf ./data/moderation/*
+rm -rf ./data/keycloak/*
 
 echo "🚀 Subindo containers novamente..."
 docker-compose up -d

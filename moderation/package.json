@@ -1,11 +1,37 @@
 {
   "name": "moderation",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx knex migrate:latest --knexfile src/config/knexfile.js && nodemon src/server.js"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "keycloak-connect": "^26.1.1",
+    "knex": "^3.1.0",
+    "lodash": "^4.17.21",
+    "module-alias": "^2.2.3",
+    "pg": "^8.14.1"
+  },
+  "_moduleAliases": {
+    "@": "./src",
+    "@utils": "./src/utils",
+    "@constants": "./src/constants",
+    "@config": "./src/config",
+    "@models": "./src/models",
+    "@routes": "./src/routes",
+    "@services": "./src/services",
+    "@database": "./src/database",
+    "@controllers": "./src/controllers"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
 }

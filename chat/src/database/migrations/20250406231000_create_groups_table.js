@@ -4,6 +4,7 @@ exports.up = async function (knex) {
     table.string('name').notNullable();
     table.specificType('users', 'text[]').notNullable().defaultTo('{}');
     table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 
   await knex('groups').insert({

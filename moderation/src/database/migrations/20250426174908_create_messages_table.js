@@ -1,16 +1,12 @@
 exports.up = function (knex) {
   return knex.schema.createTable('messages', table => {
     table.increments('id').primary();
+    table.text('content').notNullable();
+    table.integer('groupId').notNullable();
     table.integer('senderId').notNullable();
     table.string('senderUsername').notNullable();
     table.string('senderBgColor').notNullable();
-    table.text('content').notNullable();
-    table
-      .integer('groupId')
-      .unsigned()
-      .references('id')
-      .inTable('groups')
-      .onDelete('CASCADE');
+    table.specificType('invalidTerms', 'text[]');
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
