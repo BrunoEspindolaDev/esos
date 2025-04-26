@@ -6,6 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { initSocketIo } = require('@config/websocket');
 const { initKeycloak, memoryStore } = require('@config/keycloak');
+const { listenForCensorships } = require('@services/RabbitMQConsumer');
 
 const keycloak = initKeycloak();
 
@@ -33,6 +34,7 @@ app.use('/', MessageRouter);
 
 const server = app.listen(port, () => {
   console.log(`Server running on the port: ${port}`);
+  listenForCensorships();
 });
 
 initSocketIo(server);

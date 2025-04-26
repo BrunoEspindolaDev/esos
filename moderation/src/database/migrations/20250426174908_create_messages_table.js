@@ -1,6 +1,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable('messages', table => {
     table.increments('id').primary();
+    table.integer('messageId').primary();
     table.text('content').notNullable();
     table.integer('groupId').notNullable();
     table.integer('senderId').notNullable();

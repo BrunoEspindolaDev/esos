@@ -6,8 +6,8 @@ module.exports = {
     connection: {
       host: 'localhost',
       port: 5432,
-      user: 'admin',
-      password: 'adminpass',
+      user: 'chat',
+      password: 'chatpass',
       database: 'chat'
     },
     migrations: {

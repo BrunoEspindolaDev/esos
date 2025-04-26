@@ -66,6 +66,24 @@ class Message {
       senderBgColor: this._senderBgColor
     };
   }
+
+  static createMessage({
+    id = 0,
+    content = '',
+    groupId = 0,
+    senderId = 0,
+    senderUsername = '',
+    senderBgColor = ''
+  }) {
+    return new Message(
+      id,
+      content,
+      groupId,
+      senderId,
+      senderUsername,
+      senderBgColor
+    );
+  }
 }
 
 module.exports = Message;

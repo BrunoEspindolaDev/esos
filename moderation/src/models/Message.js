@@ -2,6 +2,7 @@ class Message {
   constructor(
     id,
     content,
+    messageId,
     groupId,
     senderId,
     senderUsername,
@@ -9,6 +10,7 @@ class Message {
     invalidTerms
   ) {
     this.id = id;
+    this.messageId = messageId;
     this.content = content;
     this.groupId = groupId;
     this.senderId = senderId;
@@ -26,6 +28,17 @@ class Message {
       throw new TypeError('id must be a number');
     }
     this._id = value;
+  }
+
+  get messageId() {
+    return this._messageId;
+  }
+
+  set messageId(value) {
+    if (typeof value !== 'number') {
+      throw new TypeError('messageId must be a number');
+    }
+    this._messageId = value;
   }
 
   get content() {

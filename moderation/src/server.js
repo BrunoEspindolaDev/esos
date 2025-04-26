@@ -5,13 +5,14 @@ const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { initKeycloak, memoryStore } = require('@config/keycloak');
+const { listenForMessages } = require('@services/RabbitMQConsumer');
 
 const keycloak = initKeycloak();
 
 const MessageRouter = require('@routes/MessageRouter');
 
 const app = express();
-const port = 5000;
+const port = 5001;
 
 app.use(
   session({
@@ -31,4 +32,5 @@ app.use('/', MessageRouter);
 
 const server = app.listen(port, () => {
   console.log(`Server running on the port: ${port}`);
+  listenForMessages();
 });

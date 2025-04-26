@@ -1,30 +1,21 @@
 const WebSocket = require('ws');
 const Message = require('@models/Message');
-const CreateMessageService = require('@services/CreateMessageService');
 const { getSocketIoInstance } = require('@config/websocket');
+const CreateMessageService = require('@services/CreateMessageService');
+const PublishMessageToModerator = require('@services/PublishMessageToModerator');
 
 const MessageController = {
   async createMessage(req, res) {
     try {
-      const {
-        content,
-        groupId,
-        senderId,
-        senderUsername,
-        senderBgColor,
-        socketId
-      } = req.body;
+      const { socketId } = req.body;
 
-      const message = new Message(
-        0,
-        content,
-        groupId,
-        senderId,
-        senderUsername,
-        senderBgColor
-      );
+      const message = Message.createMessage(req.body);
 
       const result = await CreateMessageService(message);
+      await PublishMessageToModerator({
+        messageId: result.id,
+        ...message.toJSON()
+      });
 
       const io = getSocketIoInstance();
       const socket = io.sockets.sockets.get(req.body.socketId);
