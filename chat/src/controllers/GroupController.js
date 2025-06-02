@@ -1,10 +1,10 @@
-const AddUserService = require('@services/AddUserService');
+const UserService = require('@services/UserService');
 
 const GroupController = {
   async addUser(req, res) {
     try {
       const { userId, groupId } = req.body;
-      const result = await AddUserService({ userId, groupId });
+      const result = await UserService.addUser({ userId, groupId });
 
       return res.status(201).json({
         message: 'Usuário adicionado ao grupo com sucesso',

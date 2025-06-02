@@ -8,7 +8,7 @@ docker-compose down -v
 echo "🧹 Removendo dados persistentes dos bancos..."
 rm -rf ./data/chat/*
 rm -rf ./data/moderation/*
-rm -rf ./data/keycloak/*
+rm -rf ./data/logs/*
 rm -rf ./data/rabbitmq/*  
 
 echo "🚀 Subindo containers novamente..."

@@ -67,7 +67,18 @@ class Message {
     };
   }
 
-  static createMessage({
+  toString() {
+    return `Message {
+      id: ${this._id},
+      content: "${this._content}",
+      groupId: ${this._groupId},
+      senderId: ${this._senderId},
+      senderUsername: "${this._senderUsername}",
+      senderBgColor: "${this._senderBgColor}"
+    }`;
+  }
+
+  static create({
     id = 0,
     content = '',
     groupId = 0,

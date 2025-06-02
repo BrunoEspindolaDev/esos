@@ -1,12 +1,12 @@
 const amqp = require('amqplib');
 
-const publishMessageToModerator = async message => {
+const publishCensorToChat = async messageId => {
   const connection = await amqp.connect('amqp://user:password@localhost');
   const channel = await connection.createChannel();
-  const queue = 'chat.to.moderator';
+  const queue = 'moderator.to.chat';
 
   await channel.assertQueue(queue, { durable: true });
-  channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)), {
+  channel.sendToQueue(queue, Buffer.from(JSON.stringify({ messageId })), {
     persistent: true
   });
 
@@ -15,4 +15,4 @@ const publishMessageToModerator = async message => {
   }, 500);
 };
 
-module.exports = publishMessageToModerator;
+module.exports = { publishCensorToChat };

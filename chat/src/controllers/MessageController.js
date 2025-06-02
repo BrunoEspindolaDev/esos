@@ -1,32 +1,27 @@
-const WebSocket = require('ws');
+const Log = require('@models/Log');
 const Message = require('@models/Message');
-const { getSocketIoInstance } = require('@config/websocket');
-const CreateMessageService = require('@services/CreateMessageService');
-const PublishMessageToModerator = require('@services/PublishMessageToModerator');
+const { Actions, Entities } = require('@constants');
+const MessageService = require('@services/MessageService');
+const RabbitMQPublisher = require('@services/RabbitMQPublisher');
 
 const MessageController = {
   async createMessage(req, res) {
     try {
-      const { socketId } = req.body;
+      const message = Message.create(req.body);
+      const created = await MessageService.createMessage(message);
 
-      const message = Message.createMessage(req.body);
-
-      const result = await CreateMessageService(message);
-      await PublishMessageToModerator({
-        messageId: result.id,
-        ...message.toJSON()
+      const log = Log.create({
+        action: Actions.CREATE,
+        entity: Entities.MESSAGE,
+        content: created
       });
 
-      const io = getSocketIoInstance();
-      const socket = io.sockets.sockets.get(req.body.socketId);
-
-      if (socket) {
-        socket.broadcast.emit('message', message);
-      }
+      await RabbitMQPublisher.publishToLogs(log);
+      await RabbitMQPublisher.publishMessageToModerator(created);
 
       return res.status(201).json({
         message: 'Mensagem criada com sucesso',
-        data: result
+        data: created
       });
     } catch (error) {
       console.error('Erro ao criar mensagem:', error);
@@ -35,7 +30,60 @@ const MessageController = {
   },
 
   async updateMessage(req, res) {
-    // Future implementation for updating a message
+    try {
+      const { id } = req.params;
+
+      const { content } = Message.create(req.body);
+      const updated = await MessageService.updateMessage(id, content);
+
+      if (!updated) {
+        return res.status(404).json({ error: 'Mensagem não encontrada' });
+      }
+
+      const log = Log.create({
+        action: Actions.UPDATE,
+        entity: Entities.MESSAGE,
+        content: updated
+      });
+
+      await RabbitMQPublisher.publishToLogs(log);
+      await RabbitMQPublisher.publishMessageToModerator(updated);
+
+      return res.status(200).json({
+        message: 'Mensagem atualizada com sucesso',
+        data: updated
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar mensagem:', error);
+      return res.status(500).json({ error: 'Erro ao atualizar mensagem' });
+    }
+  },
+
+  async deleteMessage(req, res) {
+    try {
+      const { id } = req.params;
+      const deleted = await MessageService.deleteMessage(id);
+
+      if (!deleted) {
+        return res.status(404).json({ error: 'Mensagem não encontrada' });
+      }
+
+      const log = Log.create({
+        action: Actions.DELETE,
+        entity: Entities.MESSAGE,
+        content: deleted
+      });
+
+      await RabbitMQPublisher.publishToLogs(log);
+
+      return res.status(200).json({
+        message: 'Mensagem deletada com sucesso',
+        data: deleted
+      });
+    } catch (error) {
+      console.error('Erro ao deletar mensagem:', error);
+      return res.status(500).json({ error: 'Erro ao deletar mensagem' });
+    }
   }
 };
 

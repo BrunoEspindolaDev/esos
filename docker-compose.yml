@@ -4,7 +4,6 @@ services:
   chat_db:
     image: postgres:16
     container_name: chat_postgres
-    restart: always
     environment:
       POSTGRES_USER: chat
       POSTGRES_PASSWORD: chatpass
@@ -18,7 +17,6 @@ services:
   moderation_db:
     image: postgres:16
     container_name: moderation_postgres
-    restart: always
     environment:
       POSTGRES_USER: moderation
       POSTGRES_PASSWORD: moderationpass
@@ -28,23 +26,33 @@ services:
     volumes:
       - ./data/moderation:/var/lib/postgresql/data
 
+  logs_db:
+    image: postgres:16
+    container_name: logs_db
+    environment:
+      POSTGRES_USER: logs
+      POSTGRES_PASSWORD: logspass
+      POSTGRES_DB: logs
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./data/logs:/var/lib/postgresql/data
+
   keycloak_db:
     image: postgres:16
     container_name: keycloak_postgres
-    restart: always
     environment:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keypass
       POSTGRES_DB: keycloakdb
     ports:
-      - "5434:5432"
+      - "5435:5432"
     volumes:
       - ./data/keycloak:/var/lib/postgresql/data
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.2
     container_name: my_keycloak
-    restart: always
     command: start-dev
     ports:
       - "8080:8080"
@@ -62,7 +70,6 @@ services:
   rabbitmq:
     image: "rabbitmq:3-management"
     container_name: rabbitmq
-    restart: always
     ports:
       - "15672:15672"   
       - "5672:5672"  

@@ -1,10 +1,10 @@
 const amqp = require('amqplib');
-const NotifyChatService = require('@services/NotifyChatService');
-const CreateMessageService = require('@services/CreateMessageService');
-const { analyzeText } = require('@utils/functions');
 const terms = require('@constants/terms');
+const { analyzeText } = require('@utils/functions');
+const RabbitMQPublisher = require('@services/RabbitMQPublisher');
+const MessageService = require('@services/MessageService');
 
-const listenForMessages = async () => {
+const listenChat = async () => {
   const connection = await amqp.connect('amqp://user:password@localhost');
   const channel = await connection.createChannel();
   const queue = 'chat.to.moderator';
@@ -14,12 +14,19 @@ const listenForMessages = async () => {
   channel.consume(queue, async msg => {
     if (msg !== null) {
       const message = JSON.parse(msg.content.toString());
-
       const invalidTerms = analyzeText(message.content, terms);
 
       if (invalidTerms.length > 0) {
-        await CreateMessageService({ ...message, invalidTerms });
-        await NotifyChatService(message.messageId);
+        const isExist = await MessageService.findMessageById(message.id);
+        const data = { ...message, invalidTerms };
+
+        if (isExist) {
+          await MessageService.updateMessage(data);
+        } else {
+          await MessageService.createMessage(data);
+        }
+
+        await RabbitMQPublisher.publishCensorToChat(message.id);
       }
 
       channel.ack(msg);
@@ -27,4 +34,4 @@ const listenForMessages = async () => {
   });
 };
 
-module.exports = { listenForMessages };
+module.exports = { listenChat };

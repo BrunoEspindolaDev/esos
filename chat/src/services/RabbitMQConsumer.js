@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
-const CensorMessageService = require('@services/CensorMessageService');
+const CensorService = require('@services/CensorService');
 
-const listenForCensorships = async () => {
+const listenCensorships = async () => {
   const connection = await amqp.connect('amqp://user:password@localhost');
   const channel = await connection.createChannel();
   const queue = 'moderator.to.chat';
@@ -12,13 +12,14 @@ const listenForCensorships = async () => {
     if (msg !== null) {
       const { messageId } = JSON.parse(msg.content.toString());
 
-      console.log({ messageId });
-
-      await CensorMessageService(messageId, 'Esta mensagem foi censurada.');
+      await CensorService.censorMessage(
+        messageId,
+        'Esta mensagem foi censurada.'
+      );
 
       channel.ack(msg);
     }
   });
 };
 
-module.exports = { listenForCensorships };
+module.exports = { listenCensorships };

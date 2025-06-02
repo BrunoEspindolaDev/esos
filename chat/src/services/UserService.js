@@ -1,6 +1,6 @@
 const db = require('@database/knex');
 
-const addUserService = async ({ userId, groupId }) => {
+const addUser = async ({ userId, groupId }) => {
   await db('groups')
     .where({ id: groupId })
     .update({
@@ -12,4 +12,4 @@ const addUserService = async ({ userId, groupId }) => {
   return updatedGroup;
 };
 
-module.exports = addUserService;
+module.exports = { addUser };

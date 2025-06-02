@@ -14,17 +14,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
     "keycloak-connect": "^26.1.1",
     "knex": "^3.1.0",
     "module-alias": "^2.2.3",
-    "pg": "^8.14.1",
-    "socket.io": "^4.8.1"
+    "pg": "^8.14.1"
   },
   "_moduleAliases": {
     "@": "./src",
     "@config": "./src/config",
-    "@constants": "./src/constants",
     "@models": "./src/models",
     "@routes": "./src/routes",
     "@services": "./src/services",
