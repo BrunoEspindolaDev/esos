@@ -1,8 +1,9 @@
 const amqp = require('amqplib');
 const CensorService = require('@services/CensorService');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
 
 const listenCensorships = async () => {
-  const connection = await amqp.connect('amqp://user:password@localhost');
+  const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);
   const channel = await connection.createChannel();
   const queue = 'moderator.to.chat';
 

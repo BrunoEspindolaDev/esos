@@ -22,6 +22,7 @@
   "_moduleAliases": {
     "@": "./src",
     "@config": "./src/config",
+    "@constants": "./src/constants",
     "@models": "./src/models",
     "@routes": "./src/routes",
     "@services": "./src/services",

@@ -1,9 +1,10 @@
 const amqp = require('amqplib');
 const Log = require('@models/Log');
-const CreateLogService = require('@services/CreateLogService');
+const LogService = require('@services/LogService');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
 
 const listenChat = async () => {
-  const connection = await amqp.connect('amqp://user:password@localhost');
+  const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);
   const channel = await connection.createChannel();
   const queue = 'chat.to.logs';
 
@@ -24,7 +25,7 @@ const listenChat = async () => {
         action
       });
 
-      await CreateLogService(log);
+      await LogService.createLogService(log);
       channel.ack(msg);
     }
   });

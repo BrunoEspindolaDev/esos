@@ -1,9 +1,8 @@
 const amqp = require('amqplib');
-
-const CONNECTION_URL = `amqp://user:password@localhost`;
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
 
 const publishMessageToModerator = async message => {
-  const connection = await amqp.connect(CONNECTION_URL);
+  const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);
   const channel = await connection.createChannel();
   const queue = 'chat.to.moderator';
 
@@ -18,7 +17,7 @@ const publishMessageToModerator = async message => {
 };
 
 const publishToLogs = async ({ action, entity, content }) => {
-  const connection = await amqp.connect(CONNECTION_URL);
+  const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);
   const channel = await connection.createChannel();
   const queue = 'chat.to.logs';
 

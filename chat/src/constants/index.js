@@ -8,4 +8,6 @@ const Entities = {
   MESSAGE: 'MESSAGE'
 };
 
-module.exports = { Actions, Entities };
+const RABBIT_MQ_CONNECTION_URL = `amqp://user:password@localhost`;
+
+module.exports = { Actions, Entities, RABBIT_MQ_CONNECTION_URL };

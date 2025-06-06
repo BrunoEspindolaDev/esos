@@ -8,4 +8,4 @@ const createLogService = async ({ userId, entity, entityId, action }) => {
   return message;
 };
 
-module.exports = createLogService;
+module.exports = { createLogService };
