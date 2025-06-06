@@ -75,8 +75,29 @@ const updateMessage = async ({
   return message;
 };
 
+const deleteMessage = async messageId => {
+  const deleted = await db('messages')
+    .where({ messageId })
+    .del()
+    .returning([
+      'id',
+      'content',
+      'messageId',
+      'groupId',
+      'senderId',
+      'senderUsername',
+      'senderBgColor',
+      'invalidTerms',
+      'createdAt',
+      'updatedAt'
+    ]);
+
+  return deleted[0] || null;
+};
+
 module.exports = {
   createMessage,
-  updateMessage,
-  findMessageById
+  deleteMessage,
+  findMessageById,
+  updateMessage
 };

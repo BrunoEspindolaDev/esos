@@ -1,4 +1,5 @@
 const amqp = require('amqplib');
+const { isEmpty } = require('lodash');
 const terms = require('@constants/terms');
 const { analyzeText } = require('@utils/functions');
 const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
@@ -14,20 +15,20 @@ const listenChat = async () => {
 
   channel.consume(queue, async msg => {
     if (msg !== null) {
-      const message = JSON.parse(msg.content.toString());
-      const invalidTerms = analyzeText(message.content, terms);
+      const { action, message } = JSON.parse(msg.content.toString());
 
-      if (invalidTerms.length > 0) {
-        const isExist = await MessageService.findMessageById(message.id);
-        const data = { ...message, invalidTerms };
+      if (action === 'DELETE') {
+        await MessageService.deleteMessage(message.id);
+      } else {
+        const invalidTerms = analyzeText(message.content, terms);
 
-        if (isExist) {
-          await MessageService.updateMessage(data);
-        } else {
+        if (!isEmpty(invalidTerms)) {
+          const isExist = await MessageService.findMessageById(message.id);
+          const data = { ...message, invalidTerms };
+
           await MessageService.createMessage(data);
+          await RabbitMQPublisher.publishCensorToChat(message.id);
         }
-
-        await RabbitMQPublisher.publishCensorToChat(message.id);
       }
 
       channel.ack(msg);

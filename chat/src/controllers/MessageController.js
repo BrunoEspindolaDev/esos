@@ -16,8 +16,13 @@ const MessageController = {
         content: created
       });
 
+      const moderator = {
+        action: Actions.CREATE,
+        message: created
+      };
+
       await RabbitMQPublisher.publishToLogs(log);
-      await RabbitMQPublisher.publishMessageToModerator(created);
+      await RabbitMQPublisher.publishMessageToModerator(moderator);
 
       return res.status(201).json({
         message: 'Mensagem criada com sucesso',
@@ -46,8 +51,13 @@ const MessageController = {
         content: updated
       });
 
+      const moderator = {
+        action: Actions.UPDATE,
+        message: updated
+      };
+
       await RabbitMQPublisher.publishToLogs(log);
-      await RabbitMQPublisher.publishMessageToModerator(updated);
+      await RabbitMQPublisher.publishMessageToModerator(moderator);
 
       return res.status(200).json({
         message: 'Mensagem atualizada com sucesso',
@@ -74,7 +84,13 @@ const MessageController = {
         content: deleted
       });
 
+      const moderator = {
+        action: Actions.DELETE,
+        message: deleted
+      };
+
       await RabbitMQPublisher.publishToLogs(log);
+      await RabbitMQPublisher.publishMessageToModerator(moderator);
 
       return res.status(200).json({
         message: 'Mensagem deletada com sucesso',
