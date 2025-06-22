@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  logs_db:
+    image: postgres:16
+    container_name: logs_db
+    environment:
+      POSTGRES_USER: logs
+      POSTGRES_PASSWORD: logspass
+      POSTGRES_DB: logs
+    ports:
+      - '5434:5432'
+    volumes:
+      - ./data/logs:/var/lib/postgresql/data

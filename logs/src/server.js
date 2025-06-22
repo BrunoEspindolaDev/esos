@@ -13,4 +13,5 @@ app.use(bodyParser.json());
 
 app.listen(port, () => {
   RabbitMQConsumer.listenChat();
+  console.log(`Server running on the port: ${port}`);
 });

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  moderation_db:
+    image: postgres:16
+    container_name: moderation_postgres
+    environment:
+      POSTGRES_USER: moderation
+      POSTGRES_PASSWORD: moderationpass
+      POSTGRES_DB: moderation
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./data/moderation:/var/lib/postgresql/data

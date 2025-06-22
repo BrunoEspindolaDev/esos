@@ -16,7 +16,7 @@ function initKeycloak() {
     serverUrl: 'http://localhost:8080',
     realm: 'Dev',
     credentials: {
-      secret: 'g1js8W98KZR4vEKgrC0zTdNLq2G9xkXCw' // Add in .env
+      secret: 'D5MSZAbjzvB3UXhlQ3pgIlqz5IZDU6Kw' // Add in .env
     }
   };
 

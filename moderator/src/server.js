@@ -12,7 +12,7 @@ const keycloak = initKeycloak();
 const MessageRouter = require('@routes/MessageRouter');
 
 const app = express();
-const port = 5001;
+const port = 5002;
 
 app.use(
   session({
