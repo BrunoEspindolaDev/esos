@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: chatpass
       POSTGRES_DB: chat
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - ./data/chat:/var/lib/postgresql/data
       - ./init:/docker-entrypoint-initdb.d
@@ -22,7 +22,7 @@ services:
       POSTGRES_PASSWORD: moderationpass
       POSTGRES_DB: moderation
     ports:
-      - "5433:5432"
+      - '5433:5432'
     volumes:
       - ./data/moderation:/var/lib/postgresql/data
 
@@ -34,7 +34,7 @@ services:
       POSTGRES_PASSWORD: logspass
       POSTGRES_DB: logs
     ports:
-      - "5434:5432"
+      - '5434:5432'
     volumes:
       - ./data/logs:/var/lib/postgresql/data
 
@@ -46,7 +46,7 @@ services:
       POSTGRES_PASSWORD: keypass
       POSTGRES_DB: keycloakdb
     ports:
-      - "5435:5432"
+      - '5435:5432'
     volumes:
       - ./data/keycloak:/var/lib/postgresql/data
 
@@ -55,7 +55,7 @@ services:
     container_name: my_keycloak
     command: start-dev
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: keycloak_db
@@ -68,11 +68,11 @@ services:
       - keycloak_db
 
   rabbitmq:
-    image: "rabbitmq:3-management"
+    image: 'rabbitmq:3-management'
     container_name: rabbitmq
     ports:
-      - "15672:15672"   
-      - "5672:5672"  
+      - '15672:15672'
+      - '5672:5672'
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
