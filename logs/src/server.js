@@ -4,9 +4,16 @@ const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const RabbitMQConsumer = require('@services/RabbitMQConsumer');
+const path = require('path');
+require('dotenv').config({
+  path: path.resolve(
+    __dirname,
+    '../../.env.' + (process.env.NODE_ENV || 'development')
+  )
+});
 
 const app = express();
-const port = 5001;
+const port = process.env.PORT || 5001;
 
 app.use(cors({ origin: '*' }));
 app.use(bodyParser.json());

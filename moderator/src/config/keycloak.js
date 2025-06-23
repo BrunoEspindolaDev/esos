@@ -1,5 +1,12 @@
 const session = require('express-session');
 const Keycloak = require('keycloak-connect');
+const path = require('path');
+require('dotenv').config({
+  path: path.resolve(
+    __dirname,
+    '../../.env.' + (process.env.NODE_ENV || 'development')
+  )
+});
 
 let _keycloak;
 
@@ -11,13 +18,11 @@ function initKeycloak() {
   }
 
   const keycloakConfig = {
-    clientId: 'esos',
-    bearerOnly: true,
-    serverUrl: 'http://localhost:8080',
-    realm: 'Dev',
-    credentials: {
-      secret: 'D5MSZAbjzvB3UXhlQ3pgIlqz5IZDU6Kw' // Add in .env
-    }
+    clientId: process.env.KEYCLOAK_CLIENT_ID,
+    bearerOnly: process.env.KEYCLOAK_BEARER_ONLY === 'true',
+    serverUrl: process.env.KEYCLOAK_SERVER_URL,
+    realm: process.env.KEYCLOAK_REALM,
+    credentials: { secret: process.env.KEYCLOAK_SECRET }
   };
 
   _keycloak = new Keycloak({ store: memoryStore }, keycloakConfig);

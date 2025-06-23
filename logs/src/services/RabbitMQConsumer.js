@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 const Log = require('@models/Log');
 const LogService = require('@services/LogService');
-const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants'); // Now loaded from env in constants file
 
 const listenChat = async () => {
   const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);
