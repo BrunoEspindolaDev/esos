@@ -15,7 +15,7 @@ const MessageController = {
       }
 
       message.invalidTerms = invalidTerms;
-      const result = await MessageService.create(message);
+      const result = await MessageService.createMessage(message);
 
       return res.status(200).json({
         message: 'Mensagem censurada',

@@ -36,7 +36,7 @@ class Log {
   }
 
   set entity(value) {
-    this._entityId = value;
+    this._entity = value;
   }
 
   set entityId(value) {

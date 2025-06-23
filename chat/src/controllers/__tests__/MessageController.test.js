@@ -50,12 +50,20 @@ describe('MessageController', () => {
     });
 
     it('should handle errors and return 500', async () => {
+      const consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       MessageService.createMessage.mockRejectedValue(new Error('fail'));
       const res = await request(app)
         .post('/messages')
         .send({ content: 'error', senderId: 1 });
       expect(res.status).toBe(500);
       expect(res.body.error).toMatch(/Erro ao criar mensagem/);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Erro ao criar mensagem:',
+        expect.any(Error)
+      );
+      consoleSpy.mockRestore();
     });
   });
 
@@ -84,12 +92,20 @@ describe('MessageController', () => {
     });
 
     it('should handle errors and return 500', async () => {
+      const consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       MessageService.updateMessage.mockRejectedValue(new Error('fail'));
       const res = await request(app)
         .put('/messages/1')
         .send({ content: 'err' });
       expect(res.status).toBe(500);
       expect(res.body.error).toMatch(/Erro ao atualizar mensagem/);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Erro ao atualizar mensagem:',
+        expect.any(Error)
+      );
+      consoleSpy.mockRestore();
     });
   });
 
@@ -114,10 +130,18 @@ describe('MessageController', () => {
     });
 
     it('should handle errors and return 500', async () => {
+      const consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       MessageService.deleteMessage.mockRejectedValue(new Error('fail'));
       const res = await request(app).delete('/messages/1');
       expect(res.status).toBe(500);
       expect(res.body.error).toMatch(/Erro ao deletar mensagem/);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Erro ao deletar mensagem:',
+        expect.any(Error)
+      );
+      consoleSpy.mockRestore();
     });
   });
 });

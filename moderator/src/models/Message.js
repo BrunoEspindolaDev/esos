@@ -111,6 +111,7 @@ class Message {
     return {
       id: this._id,
       content: this._content,
+      messageId: this._messageId,
       groupId: this._groupId,
       senderId: this._senderId,
       senderUsername: this._senderUsername,
@@ -122,6 +123,7 @@ class Message {
   static createMessage({
     id = 0,
     content = '',
+    messageId = 0,
     groupId = 0,
     senderId = 0,
     senderUsername = '',
@@ -131,6 +133,7 @@ class Message {
     return new Message(
       id,
       content,
+      messageId,
       groupId,
       senderId,
       senderUsername,

@@ -32,6 +32,9 @@ describe('GroupController', () => {
   });
 
   it('should handle errors and return 500', async () => {
+    const consoleSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     UserService.addUser.mockRejectedValue(new Error('fail'));
 
     const res = await request(app)
@@ -40,5 +43,7 @@ describe('GroupController', () => {
 
     expect(res.status).toBe(500);
     expect(res.body.error).toMatch(/Erro ao adicionar usuário ao grupo/);
+    expect(consoleSpy).toHaveBeenCalledWith('Erro:', expect.any(Error));
+    consoleSpy.mockRestore();
   });
 });
