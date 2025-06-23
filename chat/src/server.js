@@ -40,9 +40,14 @@ app.use(bodyParser.json());
 app.use('/', GroupRouter);
 app.use('/', MessageRouter);
 
-const server = app.listen(port, () => {
-  console.log(`Server running on the port: ${port}`);
-  listenCensorships();
-});
+// Start server only if file is executed directly
+if (require.main === module) {
+  const server = app.listen(port, () => {
+    console.log(`Server running on the port: ${port}`);
+    listenCensorships();
+  });
+  initSocketIo(server);
+}
 
-initSocketIo(server);
+// Export app for testing
+module.exports = app;
