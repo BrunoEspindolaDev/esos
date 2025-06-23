@@ -12,3 +12,10 @@ services:
       - '5434:5432'
     volumes:
       - ./data/logs:/var/lib/postgresql/data
+  logs:
+    build: .
+    image: brunoespindoladev/logs:latest
+    ports:
+      - '5001:5001'
+    depends_on:
+      - logs_db

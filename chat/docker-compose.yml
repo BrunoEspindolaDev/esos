@@ -13,3 +13,10 @@ services:
     volumes:
       - ./data/chat:/var/lib/postgresql/data
       - ./init:/docker-entrypoint-initdb.d
+  chat:
+    build: .
+    image: brunoespindoladev/chat:latest
+    ports:
+      - '5000:5000'
+    depends_on:
+      - chat_db
