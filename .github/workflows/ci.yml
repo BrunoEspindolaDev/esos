@@ -134,10 +134,12 @@ jobs:
           path: moderator/coverage/
 
       - name: SonarQube Scan
-        uses: sonarqube-quality-gate-action/sonarqube-scan-action@master
+        uses: SonarSource/sonarqube-scan-action@master
+
         with:
           args: >
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.sources=chat/src,logs/src,moderator/src -Dsonar.tests=chat/tests,logs/tests,moderator/tests -Dsonar.test.inclusions=**/tests/**/*.js -Dsonar.javascript.lcov.reportPaths=chat/coverage/lcov.info,logs/coverage/lcov.info,moderator/coverage/lcov.info -Dsonar.exclusions=**/node_modules/**,**/coverage/**
+
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
