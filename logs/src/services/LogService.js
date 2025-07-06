@@ -1,11 +1,14 @@
-const db = require('@database/knex');
+const Log = require('@models/Log');
 
-const createLogService = async ({ userId, entity, entityId, action }) => {
-  const [message] = await db('logs')
-    .insert({ userId, entity, entityId, action })
-    .returning(['userId', 'entity', 'entityId', 'action']);
-
-  return message;
+const createLogService = async logData => {
+  try {
+    const log = Log.create(logData);
+    const savedLog = await Log.save(log);
+    return savedLog;
+  } catch (error) {
+    console.error('Erro ao criar log:', error);
+    throw error;
+  }
 };
 
 module.exports = { createLogService };

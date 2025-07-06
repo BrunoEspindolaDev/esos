@@ -6,6 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { initKeycloak, memoryStore } = require('@config/keycloak');
 const RabbitMQConsumer = require('@services/RabbitMQConsumer');
+const { swaggerUi, specs } = require('@config/swagger');
 
 const keycloak = initKeycloak();
 
@@ -27,6 +28,9 @@ app.use(keycloak.middleware());
 
 app.use(cors({ origin: '*' }));
 app.use(bodyParser.json());
+
+// Swagger configuration
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/', MessageRouter);
 
