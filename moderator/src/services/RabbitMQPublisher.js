@@ -1,5 +1,5 @@
 const amqp = require('amqplib');
-const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants/index');
 
 const publishCensorToChat = async messageId => {
   const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);

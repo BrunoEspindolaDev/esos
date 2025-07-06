@@ -1,5 +1,5 @@
 const amqp = require('amqplib');
-const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants/index');
 
 const publishMessageToModerator = async payload => {
   const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);

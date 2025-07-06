@@ -2,7 +2,7 @@ const amqp = require('amqplib');
 const { isEmpty } = require('lodash');
 const terms = require('@constants/terms');
 const { analyzeText } = require('@utils/functions');
-const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants/index');
 const MessageService = require('@services/MessageService');
 const RabbitMQPublisher = require('@services/RabbitMQPublisher');
 

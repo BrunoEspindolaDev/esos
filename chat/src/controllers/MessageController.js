@@ -1,6 +1,6 @@
 const Log = require('@models/Log');
 const Message = require('@models/Message');
-const { Actions, Entities } = require('@constants');
+const { Actions, Entities } = require('@constants/index');
 const MessageService = require('@services/MessageService');
 const RabbitMQPublisher = require('@services/RabbitMQPublisher');
 

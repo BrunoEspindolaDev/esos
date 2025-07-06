@@ -122,6 +122,7 @@ class Message {
   static createMessage({
     id = 0,
     content = '',
+    messageId = 0,
     groupId = 0,
     senderId = 0,
     senderUsername = '',
@@ -131,6 +132,7 @@ class Message {
     return new Message(
       id,
       content,
+      messageId,
       groupId,
       senderId,
       senderUsername,

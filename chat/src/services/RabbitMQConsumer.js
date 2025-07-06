@@ -1,6 +1,6 @@
 const amqp = require('amqplib');
 const CensorService = require('@services/CensorService');
-const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants/index');
 
 const listenCensorships = async () => {
   const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);

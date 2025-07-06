@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 const Log = require('@models/Log');
 const LogService = require('@services/LogService');
-const { RABBIT_MQ_CONNECTION_URL } = require('@constants');
+const { RABBIT_MQ_CONNECTION_URL } = require('@constants/index');
 
 const listenChat = async () => {
   const connection = await amqp.connect(RABBIT_MQ_CONNECTION_URL);
@@ -18,7 +18,7 @@ const listenChat = async () => {
         content: { id, senderId }
       } = JSON.parse(msg.content.toString());
 
-      const log = Log.createLog({
+      const log = Log.create({
         userId: senderId,
         entity,
         entityId: id,
