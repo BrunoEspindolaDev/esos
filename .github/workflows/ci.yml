@@ -133,18 +133,27 @@ jobs:
           name: moderator-coverage
           path: moderator/coverage/
 
+      - name: Verify SonarQube Configuration
+        run: |
+          echo "🔍 Verificando configuração do SonarQube..."
+          echo "📁 Verificando se os arquivos de cobertura existem:"
+          ls -la chat/coverage/ || echo "❌ Chat coverage não encontrado"
+          ls -la logs/coverage/ || echo "❌ Logs coverage não encontrado"  
+          ls -la moderator/coverage/ || echo "❌ Moderator coverage não encontrado"
+          echo ""
+          echo "⚠️  IMPORTANTE: Certifique-se de que o Automatic Analysis está DESABILITADO no SonarQube Cloud"
+          echo "   Administration → Analysis Method → Desabilitar Automatic Analysis"
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
-
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.sources=chat/src,logs/src,moderator/src -Dsonar.tests=chat/tests,logs/tests,moderator/tests -Dsonar.test.inclusions=**/tests/**/*.js -Dsonar.javascript.lcov.reportPaths=chat/coverage/lcov.info,logs/coverage/lcov.info,moderator/coverage/lcov.info -Dsonar.exclusions=**/node_modules/**,**/coverage/**
-
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.sources=chat/src,logs/src,moderator/src -Dsonar.tests=chat/tests,logs/tests,moderator/tests -Dsonar.test.inclusions=**/tests/**/*.js -Dsonar.javascript.lcov.reportPaths=chat/coverage/lcov.info,logs/coverage/lcov.info,moderator/coverage/lcov.info -Dsonar.exclusions=**/node_modules/**,**/coverage/**
+
 
   quality-gate:
     needs: [test-chat, test-logs, test-moderator, sonarqube-scan]
