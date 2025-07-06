@@ -1,0 +1,165 @@
+name: CI Pipeline - Monorepo
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch: # Permite execução manual
+
+jobs:
+  test-chat:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./chat
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: chat/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate coverage report
+        run: npm run test:coverage
+
+      - name: Upload coverage to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: chat-coverage
+          path: chat/coverage/
+
+  test-logs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./logs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: logs/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate coverage report
+        run: npm run test:coverage
+
+      - name: Upload coverage to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-coverage
+          path: logs/coverage/
+
+  test-moderator:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./moderator
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: moderator/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate coverage report
+        run: npm run test:coverage
+
+      - name: Upload coverage to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: moderator-coverage
+          path: moderator/coverage/
+
+  sonarqube-scan:
+    needs: [test-chat, test-logs, test-moderator]
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download chat coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: chat-coverage
+          path: chat/coverage/
+
+      - name: Download logs coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: logs-coverage
+          path: logs/coverage/
+
+      - name: Download moderator coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: moderator-coverage
+          path: moderator/coverage/
+
+      - name: SonarQube Scan
+        uses: sonarqube/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} -Dsonar.sources=chat/src,logs/src,moderator/src -Dsonar.tests=chat/tests,logs/tests,moderator/tests -Dsonar.test.inclusions=**/tests/**/*.js -Dsonar.javascript.lcov.reportPaths=chat/coverage/lcov.info,logs/coverage/lcov.info,moderator/coverage/lcov.info -Dsonar.exclusions=**/node_modules/**,**/coverage/**
+
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+
+  quality-gate:
+    needs: [test-chat, test-logs, test-moderator, sonarqube-scan]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Quality Gates
+        run: |
+          echo "Quality gate check completed"
+          echo "Chat: ${{ needs.test-chat.result }}"
+          echo "Logs: ${{ needs.test-logs.result }}"
+          echo "Moderator: ${{ needs.test-moderator.result }}"
