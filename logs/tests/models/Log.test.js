@@ -1,6 +1,5 @@
 const Log = require('@models/Log');
 
-// Mock the database
 jest.mock('@database/knex', () => {
   const mockQuery = {
     insert: jest.fn().mockReturnThis(),

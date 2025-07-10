@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  # === Infra === #
+  chat_db:
+    image: postgres:16
+    container_name: chat_postgres_prod
+    environment:
+      POSTGRES_USER: chat
+      POSTGRES_PASSWORD: chatpass
+      POSTGRES_DB: chat
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data/chat:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+
+  moderation_db:
+    image: postgres:16
+    container_name: moderation_postgres_prod
+    environment:
+      POSTGRES_USER: moderation
+      POSTGRES_PASSWORD: moderationpass
+      POSTGRES_DB: moderation
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./data/moderation:/var/lib/postgresql/data
+
+  logs_db:
+    image: postgres:16
+    container_name: logs_db_prod
+    environment:
+      POSTGRES_USER: logs
+      POSTGRES_PASSWORD: logspass
+      POSTGRES_DB: logs
+    ports:
+      - '5434:5432'
+    volumes:
+      - ./data/logs:/var/lib/postgresql/data
+
+  keycloak_db:
+    image: postgres:16
+    container_name: keycloak_postgres_prod
+    environment:
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keypass
+      POSTGRES_DB: keycloakdb
+    ports:
+      - '5435:5432'
+    volumes:
+      - ./data/keycloak:/var/lib/postgresql/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.2
+    container_name: keycloak_prod
+    command: start --optimized
+    ports:
+      - '8080:8080'
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: keycloak_db
+      KC_DB_URL_DATABASE: keycloakdb
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keypass
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+    depends_on:
+      - keycloak_db
+
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    container_name: rabbitmq_prod
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
+
+  # === Services === #
+  chat-service:
+    build:
+      context: ./chat
+      dockerfile: Dockerfile.prod
+    container_name: chat_service_prod
+    ports:
+      - '5000:5000'
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=chat_db
+      - DB_PORT=5432
+      - DB_NAME=chat
+      - DB_USER=chat
+      - DB_PASSWORD=chatpass
+      - RABBITMQ_URL=amqp://user:password@rabbitmq:5672
+      - KEYCLOAK_URL=http://keycloak:8080
+    depends_on:
+      - chat_db
+      - rabbitmq
+      - keycloak
+    restart: unless-stopped
+
+  logs-service:
+    build:
+      context: ./logs
+      dockerfile: Dockerfile.prod
+    container_name: logs_service_prod
+    ports:
+      - '5002:5002'
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=logs_db
+      - DB_PORT=5432
+      - DB_NAME=logs
+      - DB_USER=logs
+      - DB_PASSWORD=logspass
+      - RABBITMQ_URL=amqp://user:password@rabbitmq:5672
+    depends_on:
+      - logs_db
+      - rabbitmq
+    restart: unless-stopped
+
+  moderator-service:
+    build:
+      context: ./moderator
+      dockerfile: Dockerfile.prod
+    container_name: moderator_service_prod
+    ports:
+      - '5001:5001'
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=moderation_db
+      - DB_PORT=5432
+      - DB_NAME=moderation
+      - DB_USER=moderation
+      - DB_PASSWORD=moderationpass
+      - RABBITMQ_URL=amqp://user:password@rabbitmq:5672
+      - KEYCLOAK_URL=http://keycloak:8080
+    depends_on:
+      - moderation_db
+      - rabbitmq
+      - keycloak
+    restart: unless-stopped

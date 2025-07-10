@@ -4,7 +4,6 @@ const {
   deleteMessage
 } = require('@services/MessageService');
 
-// Mock database
 jest.mock('@database/knex', () => jest.fn());
 
 describe('MessageService', () => {
