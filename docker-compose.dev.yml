@@ -84,7 +84,7 @@ services:
   chat-service:
     build:
       context: ./chat
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: chat_service_dev
     ports:
       - '5000:5000'
@@ -110,7 +110,7 @@ services:
   logs-service:
     build:
       context: ./logs
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: logs_service_dev
     ports:
       - '5002:5002'
@@ -134,7 +134,7 @@ services:
   moderator-service:
     build:
       context: ./moderator
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: moderator_service_dev
     ports:
       - '5001:5001'
