@@ -84,9 +84,7 @@ services:
 
   # === Services === #
   chat-service:
-    build:
-      context: ./chat
-      dockerfile: Dockerfile.prod
+    image: brunoespindoladev/esos-chat:latest
     container_name: chat_service_prod
     ports:
       - '5000:5000'
@@ -106,9 +104,7 @@ services:
     restart: unless-stopped
 
   logs-service:
-    build:
-      context: ./logs
-      dockerfile: Dockerfile.prod
+    image: brunoespindoladev/esos-logs:latest
     container_name: logs_service_prod
     ports:
       - '5002:5002'
@@ -126,9 +122,7 @@ services:
     restart: unless-stopped
 
   moderator-service:
-    build:
-      context: ./moderator
-      dockerfile: Dockerfile.prod
+    image: brunoespindoladev/esos-moderator:latest
     container_name: moderator_service_prod
     ports:
       - '5001:5001'
