@@ -13,10 +13,10 @@ function initKeycloak() {
   const keycloakConfig = {
     clientId: 'esos',
     bearerOnly: true,
-    serverUrl: 'http://localhost:8080',
+    serverUrl: process.env.KEYCLOAK_URL || 'http://localhost:8080',
     realm: 'Dev',
     credentials: {
-      secret: 'g1js8W98KZR4vEKgrC0zTdNLq2G9xkXCw' // Add in .env
+      secret: '1Q47IKjRMcEdPfQ4dCjfp2a8uYtMePHd' // Add in .env
     }
   };
 

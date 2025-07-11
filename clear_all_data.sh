@@ -30,8 +30,8 @@ echo "🧹 Removendo dados persistentes dos bancos..."
 sudo rm -rf ./data/chat/* 2>/dev/null || true
 sudo rm -rf ./data/moderation/* 2>/dev/null || true
 sudo rm -rf ./data/logs/* 2>/dev/null || true
-sudo rm -rf ./data/keycloak/* 2>/dev/null || true
 sudo rm -rf ./data/rabbitmq/* 2>/dev/null || true
+echo "ℹ️ Mantendo dados do Keycloak preservados..."
 
 echo "🧽 Limpando volumes Docker órfãos..."
 sudo docker volume prune -f

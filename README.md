@@ -104,7 +104,7 @@ docker system prune -f
 docker-compose -f docker-compose.dev.yml up chat_db moderation_db logs_db keycloak_db keycloak rabbitmq
 
 # Specific build with custom Dockerfile
-docker build -f chat/Dockerfile.dev -t chat-dev ./chat
+docker build -f chat/Dockerfile -t chat-dev ./chat
 docker build -f chat/Dockerfile.prod -t chat-prod ./chat
 
 # Check differences between environments
@@ -118,16 +118,13 @@ diff docker-compose.dev.yml docker-compose.prod.yml
 ├── docker-compose.dev.yml      # Complete Development environment
 ├── docker-compose.prod.yml     # Complete Production environment
 ├── chat/
-│   ├── Dockerfile.dev          # Chat - Development
-│   ├── Dockerfile.prod         # Chat - Production
+│   ├── Dockerfile              # Chat - Container build
 │   └── .dockerignore
 ├── logs/
-│   ├── Dockerfile.dev          # Logs - Development
-│   ├── Dockerfile.prod         # Logs - Production
+│   ├── Dockerfile              # Logs - Container build
 │   └── .dockerignore
 └── moderator/
-    ├── Dockerfile.dev          # Moderator - Development
-    ├── Dockerfile.prod         # Moderator - Production
+    ├── Dockerfile              # Moderator - Container build
     └── .dockerignore
 ```
 

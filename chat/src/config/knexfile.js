@@ -4,11 +4,11 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      host: 'localhost',
-      port: 5432,
-      user: 'chat',
-      password: 'chatpass',
-      database: 'chat'
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 5432,
+      user: process.env.DB_USER || 'chat',
+      password: process.env.DB_PASSWORD || 'chatpass',
+      database: process.env.DB_NAME || 'chat'
     },
     migrations: {
       directory: path.resolve(__dirname, '../database/migrations')

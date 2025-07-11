@@ -31,7 +31,6 @@ app.use(keycloak.middleware());
 app.use(cors({ origin: '*' }));
 app.use(bodyParser.json());
 
-// Swagger configuration
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/', GroupRouter);

@@ -12,7 +12,6 @@ build_and_push() {
     local service=$1
     local context=$2
     local dockerfile=$3
-    
     echo "📦 Building image for $service..."
     if docker build -f "$dockerfile" -t "$DOCKER_USERNAME/esos-$service:$VERSION" "$context"; then
         echo "✅ Image build for $service completed successfully!"
@@ -40,9 +39,9 @@ fi
 echo "🔄 Starting build and push process..."
 echo ""
 
-build_and_push "chat" "./chat" "./chat/Dockerfile.prod"
-build_and_push "moderator" "./moderator" "./moderator/Dockerfile.prod"
-build_and_push "logs" "./logs" "./logs/Dockerfile.prod"
+build_and_push "chat" "./chat" "./chat/Dockerfile"
+build_and_push "moderator" "./moderator" "./moderator/Dockerfile"
+build_and_push "logs" "./logs" "./logs/Dockerfile"
 
 echo "🎉 Process completed!"
 echo ""
