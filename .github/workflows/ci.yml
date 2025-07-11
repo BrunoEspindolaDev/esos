@@ -193,7 +193,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./chat
-          file: ./chat/Dockerfile.prod
+          file: ./chat/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/esos-chat:latest
           cache-from: type=gha
@@ -203,7 +203,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./logs
-          file: ./logs/Dockerfile.prod
+          file: ./logs/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/esos-logs:latest
           cache-from: type=gha
@@ -213,7 +213,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./moderator
-          file: ./moderator/Dockerfile.prod
+          file: ./moderator/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/esos-moderator:latest
           cache-from: type=gha
